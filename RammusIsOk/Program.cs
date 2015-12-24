@@ -106,7 +106,7 @@ namespace Rammus
             }
             if (Menu.Item("useW").GetValue<bool>() && W.IsReady())
             {
-                if (Player.Distance(target.Position) < 200 && (W.IsReady()))
+                if (Player.Distance(target.Position) < 500 && (W.IsReady()))
                 {
                     W.Cast(target);
                 }
