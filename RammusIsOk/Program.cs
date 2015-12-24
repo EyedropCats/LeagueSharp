@@ -97,19 +97,19 @@ namespace Rammus
         {
             Obj_AI_Hero target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 
-            if (Menu.Item("useQ").GetValue<bool>() && Q.IsReady())
+            if (Menu.Item("useQ").GetValue<bool>() && Q.IsReady() && (!Player.HasBuff("PowerBall")))
             {
-                if (!Player.HasBuff("PowerBall"))
+                if (Player.Distance(target.Position) > 150 && (Q.IsReady()) && E.IsReady())
                 {
-                    if (Player.Distance(target.Position) < 150 && (Q.IsReady()) && E.IsReady())
-                    {
-                        Q.Cast(target);
-                    }
+                    Q.Cast(target);
                 }
             }
             if (Menu.Item("useW").GetValue<bool>() && W.IsReady())
             {
-                W.Cast(target);
+                if (Player.Distance(target.Position) < 200 && (W.IsReady()))
+                {
+                    W.Cast(target);
+                }
             }
 
             if (Menu.Item("useE").GetValue<bool>() && E.IsReady())
@@ -137,12 +137,9 @@ namespace Rammus
                 return;
             var mob = mobs.First();
 
-            if (Menu.Item("JungleClearQ").GetValue<bool>() && Q.IsReady() && mob.IsValidTarget(Q.Range))
+            if (Menu.Item("JungleClearQ").GetValue<bool>() && Q.IsReady() && mob.IsValidTarget(Q.Range) && !Player.HasBuff("PowerBall"))
             {
-                if (!Player.HasBuff("PowerBall"))
-                {
-                    Q.Cast(mob);
-                }
+                Q.Cast(mob);
             }
             if (Menu.Item("JungleClearE").GetValue<bool>() && E.IsReady() && mob.IsValidTarget(E.Range))
             {
