@@ -99,7 +99,7 @@ namespace Rammus
 
             if (Menu.Item("useQ").GetValue<bool>() && Q.IsReady() && (!Player.HasBuff("PowerBall")))
             {
-                if (Player.Distance(target.Position) > 150 && (Q.IsReady()) && E.IsReady())
+                if (Player.Distance(target.Position) > 150)
                 {
                     Q.Cast(target);
                 }
