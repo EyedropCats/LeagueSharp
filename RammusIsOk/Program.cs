@@ -95,7 +95,7 @@ namespace Rammus
         }
         private static void Combo()
         {
-            Obj_AI_Hero target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
+            var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 
             if (Menu.Item("useQ").GetValue<bool>() && Q.IsReady() && (!Player.HasBuff("PowerBall")))
             {
@@ -104,6 +104,7 @@ namespace Rammus
                     Q.Cast(target);
                 }
             }
+
             if (Menu.Item("useW").GetValue<bool>() && W.IsReady())
             {
                 if (Player.Distance(target.Position) < 500 && (W.IsReady()))
@@ -139,7 +140,7 @@ namespace Rammus
 
             if (Menu.Item("JungleClearQ").GetValue<bool>() && Q.IsReady() && mob.IsValidTarget(Q.Range) && !Player.HasBuff("PowerBall"))
             {
-                Q.Cast(mob);
+                Q.Cast();
             }
             if (Menu.Item("JungleClearE").GetValue<bool>() && E.IsReady() && mob.IsValidTarget(E.Range))
             {
@@ -147,7 +148,7 @@ namespace Rammus
             }
             if (Menu.Item("JungleClearW").GetValue<bool>() && W.IsReady() && mob.IsValidTarget(W.Range))
             {
-                W.CastOnUnit(mob);
+                W.Cast();
             }
         }
         private static void Flee()
