@@ -122,8 +122,7 @@ namespace Rammus
             {
                 var target = TargetSelector.GetSelectedTarget();
                 {
-                    if (E.IsReady() && target.IsValidTarget() && !target.IsZombie && (Player.Distance(target.Position) > 500)
-)
+                    if (E.IsReady() && target.IsValidTarget() && !target.IsZombie && (Player.Distance(target.Position) > 500))
                     {
                         E.CastOnUnit(target);
                     }
