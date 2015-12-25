@@ -97,7 +97,7 @@ namespace Rammus
         {
             var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 
-            if (Menu.Item("useQ").GetValue<bool>() && Q.IsReady() && (!Player.HasBuff("PowerBall")))
+            if (Menu.Item("useQ").GetValue<bool>() && Q.IsReady() && (!Player.HasBuff("PowerBall") && !Player.HasBuff("DefensiveBallCurl")))
             {
                 if (Player.Distance(target.Position) > 150)
                 {
@@ -138,7 +138,7 @@ namespace Rammus
                 return;
             var mob = mobs.First();
 
-            if (Menu.Item("JungleClearQ").GetValue<bool>() && Q.IsReady() && mob.IsValidTarget(Q.Range) && !Player.HasBuff("PowerBall"))
+            if (Menu.Item("JungleClearQ").GetValue<bool>() && Q.IsReady() && mob.IsValidTarget(Q.Range) && !Player.HasBuff("PowerBall") && !Player.HasBuff("DefensiveBallCurl"))
             {
                 Q.Cast();
             }
