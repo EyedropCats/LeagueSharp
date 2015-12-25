@@ -45,6 +45,7 @@ namespace Rammus
             Menu.AddSubMenu(Combo);
             Combo.AddItem(new MenuItem("useQ", "Use Q").SetValue(true));
             Combo.AddItem(new MenuItem("useE", "Use E").SetValue(true));
+            Combo.AddItem(new MenuItem("ESelected", "Only E Selected Target").SetValue(true));
             Combo.AddItem(new MenuItem("useW", "Use W").SetValue(true));
             Combo.AddItem(new MenuItem("NumberOfEnemys", "Minimum Enemies to Use Ult").SetValue(new Slider(1, 5, 0)));
 
@@ -95,10 +96,10 @@ namespace Rammus
         }
         private static void Combo()
         {
-            var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
-
             if (Menu.Item("useQ").GetValue<bool>() && Q.IsReady() && (!Player.HasBuff("PowerBall") && !Player.HasBuff("DefensiveBallCurl")))
             {
+                var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
+
                 if (Player.Distance(target.Position) > 150)
                 {
                     Q.Cast(target);
@@ -107,15 +108,25 @@ namespace Rammus
 
             if (Menu.Item("useW").GetValue<bool>() && W.IsReady())
             {
-                if (Player.Distance(target.Position) < 500 && (W.IsReady()))
-                {
-                    W.Cast(target);
-                }
+                var target = TargetSelector.GetTarget(500, TargetSelector.DamageType.Physical);    
+                W.Cast(target);
             }
 
             if (Menu.Item("useE").GetValue<bool>() && E.IsReady())
             {
+                var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);    
                 E.CastOnUnit(target);
+            }
+
+            if (Menu.Item("ESelected").GetValue<bool>() && Menu.Item("useE").GetValue<bool>() && E.IsReady())
+            {
+                var target = TargetSelector.GetSelectedTarget();
+                {
+                    if (E.IsReady() && target.IsValidTarget() && !target.IsZombie)
+                    {
+                        E.CastOnUnit(target);
+                    }
+                }
             }
 
             if (R.IsReady())
