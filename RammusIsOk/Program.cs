@@ -44,8 +44,10 @@ namespace Rammus
             var Combo = new Menu("Combo", "Combo");
             Menu.AddSubMenu(Combo);
             Combo.AddItem(new MenuItem("useQ", "Use Q").SetValue(true));
+            Combo.AddItem(new MenuItem("Gapclose", "Anti-Gapclose with Q").SetValue(true));
             Combo.AddItem(new MenuItem("useE", "Use E").SetValue(true));
             Combo.AddItem(new MenuItem("ESelected", "Only E Selected Target").SetValue(true));
+            Combo.AddItem(new MenuItem("Interrupt", "Interrupt with E").SetValue(true));
             Combo.AddItem(new MenuItem("useW", "Use W").SetValue(true));
             Combo.AddItem(new MenuItem("NumberOfEnemys", "Minimum Enemies to Use Ult").SetValue(new Slider(1, 5, 0)));
 
@@ -62,8 +64,11 @@ namespace Rammus
             Misc.AddItem(new MenuItem("FleeQ", "Use Q to Flee").SetValue(true));
             Misc.AddItem(new MenuItem("EscapeW", "Automatically use W at X HP").SetValue(new Slider(10)));
 
+
             Menu.AddToMainMenu();
             Game.OnUpdate += OnUpdate;
+            AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
+            Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Game.PrintChat("Rammus by Busky");
         }
 
@@ -105,13 +110,11 @@ namespace Rammus
                     Q.Cast(target);
                 }
             }
-
             if (Menu.Item("useW").GetValue<bool>() && W.IsReady())
             {
                 var target = TargetSelector.GetTarget(500, TargetSelector.DamageType.Physical);    
                 W.Cast(target);
             }
-
             if (Menu.Item("useE").GetValue<bool>() && E.IsReady())
             {
                 var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);    
@@ -138,6 +141,23 @@ namespace Rammus
                 }
             }
         }
+        private static void OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+            var target = gapcloser.Sender;
+            if (Menu.Item("Gapclose").GetValue<bool>() && Q.IsReady() && target.IsValidTarget(Q.Range))
+            {
+                Q.Cast(target);
+            }
+        }
+
+        private static void Interrupter2_OnInterruptableTarget(Obj_AI_Hero sender, Interrupter2.InterruptableTargetEventArgs args)
+        {
+            if (Menu.Item("Interrupt").GetValue<bool>() && E.IsReady() && E.IsReady() && sender.IsValidTarget(E.Range))
+            {
+                E.CastOnUnit(sender);
+            }
+        }
+
         private static void JungleClear()
         {
             if (ObjectManager.Player.ManaPercent < Menu.Item("JungleMana").GetValue<Slider>().Value)
