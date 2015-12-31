@@ -101,7 +101,7 @@ namespace Rammus
         }
         private static void Combo()
         {
-            if (Menu.Item("useQ").GetValue<bool>() && Q.IsReady() && (!Player.HasBuff("PowerBall") && !Player.HasBuff("DefensiveBallCurl")))
+            if (Menu.Item("useQ").GetValue<bool>() && Q.IsReady() && !Player.HasBuff("PowerBall") && !Player.HasBuff("DefensiveBallCurl"))
             {
                 var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 
@@ -115,17 +115,17 @@ namespace Rammus
                 var target = TargetSelector.GetTarget(500, TargetSelector.DamageType.Physical);    
                 W.Cast(target);
             }
-            if (Menu.Item("useE").GetValue<bool>() && E.IsReady())
+            if (Menu.Item("useE").GetValue<bool>() && !Player.HasBuff("PowerBall") && E.IsReady())
             {
                 var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);    
                 E.CastOnUnit(target);
             }
 
-            if (Menu.Item("ESelected").GetValue<bool>() && Menu.Item("useE").GetValue<bool>() && E.IsReady())
+            if (Menu.Item("ESelected").GetValue<bool>() && Menu.Item("useE").GetValue<bool>())
             {
                 var target = TargetSelector.GetSelectedTarget();
                 {
-                    if (E.IsReady() && target.IsValidTarget() && !target.IsZombie && (Player.Distance(target.Position) > 500))
+                    if (E.IsReady() && !Player.HasBuff("DefensiveBallCurl") && target.IsValidTarget() && !target.IsZombie && (Player.Distance(target.Position) > 500))
                     {
                         E.CastOnUnit(target);
                     }
